@@ -1,29 +1,52 @@
 'use strict';
 
-let title = prompt('Как называется твой проект?');
-let screens = prompt('Какие типы экранов нужно разработать?');
-let screenPrice = +prompt('Сколько будет стоить данная работа?');
-let adaptive = confirm('Нужен ли адаптив на сайте?');
+let title;
+let screens;
+let screenPrice;
+let adaptive;
 
-let service1 = prompt('Какой дополнительный тип услуги нужен?');
-let servicePrice1 = +prompt('Сколько это будет стоить?');
+let service1;
+let service2;
+let servicePrice;
 
-let service2 = prompt('Какой дополнительный тип услуги нужен?');
-let servicePrice2 = +prompt('Сколько это будет стоить?');
-
-let fullPrice = screenPrice + servicePrice1 + servicePrice2;
-//let servicePercentPrice = fullPrice - (fullPrice * (rollback / 100));
-let allServicePrices = getAllServicePrices();
+let fullPrice;
+let servicePercentPrice;
+let allServicePrices;
 
 let rollback = 10;
 
+function isNumber(num) {
+    return !isNaN(parseFloat(num)) && isFinite(num);
+}
 
-function getAllServicePrices() {
-    return servicePrice1 + servicePrice2;
+function asking() {
+    title = prompt('Как называется твой проект?', 'Свартальхейм');
+    screens = prompt('Какие типы экранов нужно разработать?', 'Сложные');
+    screenPrice = prompt('Сколько будет стоить данная работа?');
+
+    if (!isNumber(screenPrice)) {
+        do {
+            screenPrice = prompt('Сколько будет стоить данная работа?');
+        } while(!isNumber(screenPrice));
+    } 
+
+    adaptive = confirm('Нужен ли адаптив на сайте?');
+}
+
+function getAllServicePrices(arr) {
+    let sum = 0;
+
+    for (let i = 0; i < arr.length; i++) {
+        arr[i] = prompt('Какой дополнительный тип услуги нужен?', 'Метрика');
+        servicePrice = prompt('Сколько это будет стоить?');
+        while(!isNumber(servicePrice)) servicePrice = prompt('Сколько это будет стоить?');
+        sum += +servicePrice.trim();
+    }
+    return +sum;
 }
 
 function getFullPrice() {
-    return allServicePrices + screenPrice;
+    return +allServicePrices + +screenPrice;
 }
 
 function getTitle() {
@@ -36,7 +59,7 @@ function getTitle() {
 }
 
 function getServicePercentPrices() { 
-    return allServicePrices - (fullPrice * (rollback / 100));
+    return +fullPrice - (+fullPrice * (+rollback / 100));
 }
 
 function showTypeOf(variable) {
@@ -50,14 +73,26 @@ function getRollBack(price) {
     else return ('error');
 }
 
+asking();
+allServicePrices = getAllServicePrices([service1, service2]);
+fullPrice = getFullPrice();
+servicePercentPrice = getServicePercentPrices();
+title = getTitle();
+
 showTypeOf(title);
-showTypeOf(screens);
+showTypeOf(+screenPrice);
 showTypeOf(adaptive);
 
-console.log(screens.split(' '));
+showTypeOf(screens);
+showTypeOf(+servicePrice);
+
+showTypeOf(fullPrice);
+showTypeOf(servicePercentPrice);
+showTypeOf(allServicePrices);
+
 console.log(getRollBack(fullPrice));
-console.log(getServicePercentPrices);
-console.log(getTitle());
+
+
 
 
 
